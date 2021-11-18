@@ -13,6 +13,8 @@ class PizzaList extends StatefulWidget {
 class _PizzaListState extends State<PizzaList> {
   // la liste des pizzas
   List<Pizza> _pizzas = [];
+
+
   @override
   void initState() {
     _pizzas = PizzaData.buildList();
