@@ -20,13 +20,12 @@ class _PanierState extends State<Panier> {
         body:Column(
           children: [
             Expanded(
-              //child: ListView.builder(
-              child: ListView(
-                  children: [
-                  Text('Pizza 1'),
-                  Text('Pizza 2'),
-                  Text('Pizza 3'),
-                ],
+              //child: ListView.builder(widget._cart),
+              child: ListView.builder(
+                itemCount : widget._cart.totalItems(),
+                itemBuilder : (context, index) {
+                  return _buildItem(widget._cart.getCartItem(index));
+                }
               ),
             ),
             Row(

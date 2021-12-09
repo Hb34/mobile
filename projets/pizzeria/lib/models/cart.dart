@@ -18,7 +18,7 @@ class Cart {
   void addProduct(Pizza pizza) {
     // Recherche du produit
     int index = findCartItemIndex(pizza.id);
-    if (index ==-1) {
+    if (index == -1) {
       // Ajout
       _items.add(CartItem(pizza));
     } else {
