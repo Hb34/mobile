@@ -27,7 +27,7 @@ class TotalWidget extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.only(left: 12.0),
                 child: Text(
-                  'Total',
+                  'TOTAL',
                   style: PizzeriaStyle.priceTotalTextStyle,
                   textAlign: TextAlign.end,
                 ),

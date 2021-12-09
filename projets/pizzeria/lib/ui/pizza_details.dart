@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:pizzeria/models/cart.dart';
 import 'package:pizzeria/models/option_item.dart';
 import 'package:pizzeria/models/pizza.dart';
+import 'package:pizzeria/ui/share/appbar_widget.dart';
 import 'package:pizzeria/ui/share/buy_button_widget.dart';
 import 'package:pizzeria/ui/share/pizzeria_style.dart';
 import 'package:pizzeria/ui/share/total_widget.dart';
 
 class PizzaDetails extends StatefulWidget {
   final Pizza _pizza;
-  PizzaDetails(this._pizza, {Key? key}) : super(key: key);
+  final Cart _cart;
+  PizzaDetails(this._pizza, this._cart, {Key? key}) : super(key: key);
 
 
   @override
@@ -18,9 +21,7 @@ class _PizzaDetailsState extends State<PizzaDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget._pizza.title),
-      ),
+      appBar: AppBarWidget(widget._pizza.title,widget._cart),
       body: ListView(
         padding: EdgeInsets.all(4.0),
         children: [
@@ -57,17 +58,16 @@ class _PizzaDetailsState extends State<PizzaDetails> {
             'Sauce sélectionnées',
             style: PizzeriaStyle.headerTextStyle,
           ),
-          _buildeDropDownSauces(),
+          _buildDropDownSauces(),
           //Text('Les sauces'),
           TotalWidget(widget._pizza.total),
-          BuyButtonWidget(),
-          //BuyButtonWidget(widget._pizza, widget._cart),
+          BuyButtonWidget(widget._pizza, widget._cart),
         ],
       ),
     );
   }
-
- /* _buildBuyButton() {
+/*
+  _buildBuyButton() {
     return
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -89,8 +89,8 @@ class _PizzaDetailsState extends State<PizzaDetails> {
             ),
           ],
         );
-  }*/
-
+  }
+*/
 
   _buildDropDownPates() {
     return DropdownButton<OptionItem>(
@@ -128,7 +128,7 @@ class _PizzaDetailsState extends State<PizzaDetails> {
       },
     );
   }
-  _buildeDropDownSauces() {
+  _buildDropDownSauces() {
     return DropdownButton<OptionItem>(
       isExpanded: true,
       value: Pizza.sauces[widget._pizza.sauce],

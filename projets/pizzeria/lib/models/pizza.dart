@@ -20,8 +20,8 @@ class Pizza {
   static final List<OptionItem> tailles = [
     OptionItem(0, "Small", supplement: -1),
     OptionItem(1, "Medium"),
-    OptionItem(1, "Large", supplement: 2),
-    OptionItem(1, "Extra large", supplement: 2),
+    OptionItem(2, "Large", supplement: 2),
+    OptionItem(3, "Extra large", supplement: 2),
   ];
   static final List<OptionItem> sauces = [
     OptionItem(0, "Base sauce tomate"),
