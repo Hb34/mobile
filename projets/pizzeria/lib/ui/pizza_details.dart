@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pizzeria/models/cart.dart';
 import 'package:pizzeria/models/option_item.dart';
 import 'package:pizzeria/models/pizza.dart';
 import 'package:pizzeria/ui/share/appbar_widget.dart';
@@ -9,9 +8,7 @@ import 'package:pizzeria/ui/share/total_widget.dart';
 
 class PizzaDetails extends StatefulWidget {
   final Pizza _pizza;
-  final Cart _cart;
-  PizzaDetails(this._pizza, this._cart, {Key? key}) : super(key: key);
-
+  PizzaDetails(this._pizza, {Key? key}) : super(key: key);
 
   @override
   _PizzaDetailsState createState() => _PizzaDetailsState();
@@ -21,7 +18,7 @@ class _PizzaDetailsState extends State<PizzaDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(widget._pizza.title,widget._cart),
+      appBar: AppBarWidget(widget._pizza.title),
       body: ListView(
         padding: EdgeInsets.all(4.0),
         children: [
@@ -30,7 +27,7 @@ class _PizzaDetailsState extends State<PizzaDetails> {
             style: PizzeriaStyle.pageTitleTextStyle,
           ),
           Image.asset(
-            'assets/images/pizzas/${widget._pizza.image}',
+            '${widget._pizza.image}',
             height: 180,
           ),
           Text(
@@ -61,37 +58,11 @@ class _PizzaDetailsState extends State<PizzaDetails> {
           _buildDropDownSauces(),
           //Text('Les sauces'),
           TotalWidget(widget._pizza.total),
-          BuyButtonWidget(widget._pizza, widget._cart),
+          BuyButtonWidget(widget._pizza),
         ],
       ),
     );
   }
-/*
-  _buildBuyButton() {
-    return
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor:
-                MaterialStateProperty.all<Color>(Colors.red.shade800)),
-              child: Row(
-                children: [
-                  Icon(Icons.shopping_cart),
-                  SizedBox(width: 5,),
-                  Text("Commander"),
-                ],
-              ),
-              onPressed: () {
-                print('Commander une pizza');
-              },
-            ),
-          ],
-        );
-  }
-*/
-
   _buildDropDownPates() {
     return DropdownButton<OptionItem>(
       isExpanded: true,

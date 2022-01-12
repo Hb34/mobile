@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:pizzeria/models/cart.dart';
 import 'package:pizzeria/models/pizza.dart';
-import 'package:pizzeria/models/pizza_data.dart';
-import 'package:pizzeria/ui/pizza_details.dart';
+import 'package:pizzeria/services/pizzeria_service.dart';
 import 'package:pizzeria/ui/share/appbar_widget.dart';
 import 'package:pizzeria/ui/share/buy_button_widget.dart';
+import 'package:pizzeria/ui/share/pizzeria_style.dart';
 
 
 class PizzaList extends StatefulWidget {
-  final Cart _cart;
-  const PizzaList(this._cart, {Key? key}) : super(key: key);
+
+  const PizzaList({Key? key}) : super(key: key);
 
   @override
   _PizzaListState createState() => _PizzaListState();
@@ -17,28 +16,48 @@ class PizzaList extends StatefulWidget {
 
 class _PizzaListState extends State<PizzaList> {
   // la liste des pizzas
-  List<Pizza> _pizzas = [];
+  late Future<List<Pizza>> _pizzas;
+  PizzeriaService _service = PizzeriaService();
 
 
   @override
   void initState() {
-    _pizzas = PizzaData.buildList();
+    _pizzas = _service.fetchPizzas();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBarWidget("Nos pizzas",widget._cart),
-        body: ListView.builder(
-            padding: const EdgeInsets.all(8.0),
-            //itemExtent: ,
-            itemCount: _pizzas.length,
-            itemBuilder: (context, index) {
-              return _buildRow(_pizzas[index]);
-            }));
+      appBar: AppBarWidget("Nos pizzas"),
+      body: FutureBuilder<List<Pizza>> (
+        future: _pizzas,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return _buildListView(snapshot.data!);
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                'Impossible de récupérer les données : ${snapshot.error}',
+                style: PizzeriaStyle.errorTextStyle,
+              ),
+            );
+          }
+          return Center(child: CircularProgressIndicator(),);
+        },
+      ),
+    );
   }
 
-  _buildRow(Pizza pizza) {
+  _buildListView(List<Pizza> pizzas) {
+    return ListView.builder(
+        padding: const EdgeInsets.all(8.0),
+        itemCount: pizzas.length,
+        itemBuilder: (context, index) {
+          return _buildRow(context, pizzas[index]);
+        });
+  }
+
+  _buildRow(context, Pizza pizza) {
     return Card(
       // color: Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(
@@ -53,13 +72,13 @@ class _PizzaListState extends State<PizzaList> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PizzaDetails(pizza, widget._cart),
+                  builder: (context) => _buildPizzaDetails(pizza),
                 ),
               );
             },
             child: _buildPizzaDetails(pizza),
           ),
-          BuyButtonWidget(pizza, widget._cart),
+          BuyButtonWidget(pizza),
         ],
       ),
     );
@@ -75,7 +94,7 @@ class _PizzaListState extends State<PizzaList> {
           leading: Icon(Icons.local_pizza),
         ),
         Image.asset(
-          'assets/images/pizzas/${pizza.image}',
+          '${pizza.image}',
           height: 120,
           width: MediaQuery
               .of(context)
