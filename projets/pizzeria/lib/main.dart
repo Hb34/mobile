@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:pizzeria/ui/panier.dart';
 import 'package:pizzeria/ui/share/appbar_widget.dart';
+import 'package:provider/provider.dart';
 import 'models/cart.dart';
 import 'models/menu.dart';
 import 'ui/pizza_list.dart';
 import 'package:pizzeria/ui/pizza_list.dart';
 
 void main() {
-  runApp( MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context)=>Cart(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -32,14 +39,19 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Notre Pizzéria'),
+      // Start de app with the "/" named route. In this case, the app start
+      // on the FirstScreen widget
+      /*initialRoute: '/',*/
+      routes: {
+        //'/profil': (context)=> Profil(),
+        '/panier': (context)=> Panier(),
+      },
     );
   }
 }
 class MyHomePage extends StatelessWidget {
   String title;
-  Cart _cart;
   MyHomePage({required this.title, Key? key}) :
-        _cart = Cart(),
         super(key: key);
 
   var _menus = [
@@ -52,7 +64,7 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(title,_cart),
+      appBar: AppBarWidget(title),
       body: Center(
         // Center is a layout widget. It takes a single child and
         // positions it in the middle of the parent
@@ -64,7 +76,7 @@ class MyHomePage extends StatelessWidget {
                 case 2: //Pizza
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => PizzaList(_cart)),
+                      MaterialPageRoute(builder: (context) => PizzaList()),
                   );
                   break;
               }
